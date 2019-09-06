@@ -15,7 +15,7 @@
 	<div class="homepage">
       <!-- 导航头像 -->
       <div class="set" id="toggle-sidebar" style="width: 136.364px; float:left">
-        {{#if( user.avatar === "")}}
+        {{#if( user.avatar === "" || user.avatar === null)}}
         <img src="/home/img/a1.png" />
         {{else}}
         <img src="{{user.avatar}}" />
@@ -58,7 +58,7 @@
   <div id="dowebok">
       <ul class="nav">
         <li class="nav_li" >
-          {{#if( user.avatar=== "")}}
+          {{#if( user.avatar=== "" || user.avatar === null)}}
             <img src="/home/img/a1.png" style=" display:block;margin:auto" />
           {{else}}
             <img src="{{user.avatar}}" style=" display:block;margin:auto" />

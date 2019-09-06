@@ -12,7 +12,7 @@
         {{#each(this.userlist,"value","key")}}
         <li>
           <div class="lf">
-            {{#if( value.avatar === "")}}
+            {{#if( value.avatar === "" || value.avatar === null)}}
               <a href="/user/groupChat?friend={{value.friend}}"><img src="/home/img/a1.png" /></a>
             {{else}}
               <a href="/user/groupChat?friend={{value.friend}}"><img src="{{value.avatar}}" /></a>

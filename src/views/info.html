@@ -17,7 +17,7 @@
       </div>
       <div class="data_box">
         <div class="avatar">
-          {{#if( user.avatar === "")}}
+          {{#if( user.avatar === ""|| user.avatar === null)}}
             <img src="/home/img/a1.png" onclick="avtar.click()" />
           {{else}}
             <img src="{{user.avatar}}" onclick="avtar.click()" />

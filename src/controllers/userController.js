@@ -341,7 +341,7 @@ module.exports.groupList = function(req,res)
 
     var sql = `SELECT friends.*,friend.username,friend.avatar FROM pre_user_friends AS friends LEFT JOIN pre_user AS user ON friends.userid = user.id LEFT JOIN pre_user AS friend ON friends.friend = friend.id WHERE friends.userid = ${userid} AND friends.status = 1 ORDER BY friends.id ASC`;
     db.query(sql).then(function(userlist){
-      if (JSON.stringify(userlist) != "{}")
+      if (JSON.stringify(userlist) != "{}" && JSON.stringify(userlist) != null)
       {
         for(var i=0;i<userlist.length;i++)
         {
@@ -365,11 +365,15 @@ module.exports.groupList = function(req,res)
         res: res,
         req: req,
         file: "groupList.html",
-        data: { group: group}
+        data: { 
+          group: group
+        }
       };
       base.render(render);
       
     })
+
+    console.log(group);
 
 
   })
