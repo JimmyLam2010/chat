@@ -3,7 +3,7 @@ include_once("../includes/init.php");
 include_once("../includes/pagination.php");
 include_once("common.php");
 
-$count = $db->count('website');
+$count = $db->count('user');
 $count = $count['count'];
 // 当前是第几页
 $page = isset($_GET['page']) && !empty($_GET['page']) ? $_GET['page'] : 1;
@@ -18,7 +18,7 @@ $totalPage = ceil($count / $limit);
 // 总数大于0，进行分页。
 if( $count ) {
     // 2. 连表 倒序 查询 文章和文章分类
-    $websitelist = $db->select()->from("website")->limit($offset,$limit)->all();
+    $userlist = $db->select()->from("user")->limit($offset,$limit)->all();
     // foreach($data as $key=>$value){
     //    $data[$key]['title_cut'] = cutstr($value['title'], 0, 10, '...');
     // }
@@ -43,7 +43,7 @@ date_default_timezone_set('PRC');
 
     <div class="content">
         <div class="header">
-            <h1 class="page-title">采集节点列表</h1>
+            <h1 class="page-title">用户列表</h1>
         </div>
         <ul class="breadcrumb">
             <li><a href="index.php">Home</a> <span class="divider">/</span></li>
@@ -54,7 +54,7 @@ date_default_timezone_set('PRC');
             <div class="row-fluid">
                     
                 <div class="btn-toolbar">
-                    <button class="btn btn-primary" onclick="location='website_add_edit.php'"><i class="icon-list"></i> 添加采集节点</button>
+                    <button class="btn btn-primary" onclick="location='user_add_edit.php'"><i class="icon-list"></i> 添加用户</button>
                   <div class="btn-group">
                   </div>
                 </div>
@@ -62,24 +62,46 @@ date_default_timezone_set('PRC');
                 <div class="well">
                     <div id="myTabContent" class="tab-content">
                       <div class="tab-pane active in" id="home">
-                      <form action="website_delete.php" method="post">
+                      <form action="user_delete.php" method="post">
                         <table class="table">
                           <tr>
                               <th><input type="checkbox" name="delete" id="delete" /></th>
                               <th>id</th>
-                              <th>节点名</th>
-                              <th>地址</th>
+                              <th>用户名</th>
+                              <th>头像</th>
+                              <th>邮箱</th>
+                              <th>注册时间</th>
+                              <th>验证状态</th>
                               <th>操作</th>
                           </tr>
-                          <?php foreach($websitelist as $item) {?>
+                          <?php foreach($userlist as $item) {?>
                           <tr>
-                              <td><input type="checkbox" class="items" name="websiteid[]" value="<?php echo $item['id'];?>" /></td>
+                              <td><input type="checkbox" class="items" name="cateid[]" value="<?php echo $item['id'];?>" /></td>
                               <td><?php echo $item['id'];?></td>
-                              <td><?php echo $item['website_name'];?></td>
-                              <td><a href="<?php echo $item['url'];?>"><?php echo $item['url'];?></a></td>
+                              <td><?php echo $item['username'];?></td>
+                              <?php if(!empty($item['avatar'])){?>
                               <td>
-                                  <a href='website_add_edit.php?id=<?php echo $item['id'];?>'><i class="icon-pencil"></i></a>
-                                  <a href="#myModal" role="button" data-toggle="modal"><i class="icon-remove"></i></a>
+                                <div class="user_thumb">
+                                  <img src="<?php echo ASSETS_PATH.$item['avatar'];?>" />
+                                </div>
+                              </td>
+                              <?php }else{?>
+                              <td>
+                                <div class="user_thumb">
+                                  <img class="img-responsive" src="<?php echo ADMIN_PATH.'/images/cover.png';?>" />
+                                </div>
+                              </td>
+                              <?php }?>
+                              <td><?php echo $item['email'];?></td>
+                              <td><?php echo date( "Y-m-d H:i",$item['createtime']);?></td>
+                              <?php if($item['status']){ ?>
+                              <td>已验证</td>
+                              <?php }else{ ?>
+                              <td>未验证</td>
+                              <?php } ?>
+                              <td>
+                                  <a href='user_add_edit.php?id=<?php echo $item['id'];?>'><i class="icon-pencil"></i></a>
+                                  <a href='user_delete.php?id=<?php echo $item['id'];?>'><i class="icon-remove"></i></a>
                               </td>
                           </tr>
                           <?php }?>
@@ -98,22 +120,6 @@ date_default_timezone_set('PRC');
                     </nav>
                   </div>
                 </div>
-
-                <form method="post">
-                <div class="modal small hide fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 id="myModalLabel">Delete Confirmation</h3>
-                    </div>
-                    <div class="modal-body">
-                        <p class="error-text"><i class="icon-warning-sign modal-icon"></i>Are you sure you want to delete this</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                        <button type="submit" onclick="location='website_delete.php?id=<?php echo $item['id'];?>'" class="btn btn-danger">Delete</button>
-                    </div>
-                </div>
-                </form>
                 
                 <footer>
                     <hr>

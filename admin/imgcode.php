@@ -61,7 +61,8 @@ for($i=0;$i<=100;$i++)
 session_start();
 $_SESSION['imgcode'] = $code;
 
-header("Content-Type:image/png;");
+ob_clean();//原来的程序没有这一栏
+header("Content-type:image/jpeg"); //以jpeg格式输出，注意上面不能输出任何字符，否则出错
 
 //输出图片
 imagepng($img);

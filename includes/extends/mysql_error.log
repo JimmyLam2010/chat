@@ -95,3 +95,5 @@
 [2019-08-28 09:41] SQL错误：Unknown column 'book.name' in 'field list'
 [2019-08-28 09:42] SQL错误：Unknown column 'book.name' in 'field list'
 [2019-08-28 11:42] SQL错误：You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND display = 'true'' at line 1
+[2019-09-09 13:58] SQL错误：Table 'chat.pre_book' doesn't exist
+[2019-09-09 14:59] SQL错误：Table 'chat.pre_cate' doesn't exist

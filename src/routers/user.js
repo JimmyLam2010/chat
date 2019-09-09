@@ -83,9 +83,11 @@ userRouter.get('/logout', userCtrl.logout);
 //注册的post方法
 userRouter.post("/register", userCtrl.registerData);
 
-userRouter.post("/friendAdd", userCtrl.friendAddData);
+userRouter.get("/friendAdd", checkUser, userCtrl.friendAdd);
 
-userRouter.post("/friendSearch", userCtrl.friendSearchData);
+userRouter.post("/friendAdd", checkUser, userCtrl.friendAddData);
+
+// userRouter.post("/friendSearch", userCtrl.friendSearchData);
 
 
 module.exports = userRouter;

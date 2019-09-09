@@ -79,10 +79,14 @@ date_default_timezone_set('PRC');
                               <td><?php echo $item['id'];?></td>
                               <td><?php echo $item['username'];?></td>
                               <?php if(!empty($item['thumb'])){?>
-                              <td><img src="<?php echo UPLOAD_PATH.$item['thumb'];?>" /></td>
+                              <td>
+                                <div class="user_thumb">
+                                  <img src="<?php echo UPLOAD_PATH.$item['thumb'];?>" />
+                                </div>
+                              </td>
                               <?php }else{?>
                               <td>
-                                <div class="book_thumb">
+                                <div class="user_thumb">
                                   <img class="img-responsive" src="<?php echo ADMIN_PATH.'/images/cover.png';?>" />
                                 </div>
                               </td>

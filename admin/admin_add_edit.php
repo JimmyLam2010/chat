@@ -17,13 +17,12 @@ if($id) {
 if($_POST) {
     $username = isset($_POST['username']) && !empty($_POST['username']) ? trim($_POST['username']) : '';
     $password = isset($_POST['password']) && !empty($_POST['password']) ? intval($_POST['password']) : '';
-    $salt = isset($_POST['salt']) && !empty($_POST['salt']) ? trim($_POST['salt']) : '';
     $email = isset($_POST['email']) && !empty($_POST['email']) ? trim($_POST['email']) : '';
 
     $coloum = array(
         'username' => $username,
         'password' => md5($password.$salt),
-        'salt' => $salt,
+        'salt' => $String->randomStr(),
         'email' => $email,
         'register_time' => time()
     );
@@ -87,8 +86,6 @@ if($_POST) {
                             <input type="text" name="username" class="input-xxlarge" placeholder="请输入用户名" value="<?php echo $id ? $admin['username'] : ''?>"/>
                             <label>密码</label>
                             <input type="password" name="password" class="input-xxlarge" placeholder="请输入密码" value=""/>
-                            <label>密码盐</label>
-                            <input type="text" name="salt" class="input-xxlarge" placeholder="请输入密码盐" value="<?php echo $id ? $admin['salt'] : ''?>"/>
                             <label>邮箱</label>
                             <input type="email" name="email" class="input-xxlarge" placeholder="请输入邮箱" value="<?php echo $id ? $admin['email'] : ''?>"/>
                             <label></label>

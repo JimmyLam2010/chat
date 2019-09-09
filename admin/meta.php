@@ -1,5 +1,5 @@
 <meta charset="utf-8">
-<title>小说网</title>
+<title>聊天</title>
 <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="小说" />

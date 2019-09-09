@@ -20,6 +20,13 @@
             <li>
                 <input type="text" placeholder="请输入好友名称" name="name" required />
             </li>
+            <li>
+                <select name="group" class="select">
+                  {{#each(groups)}}
+                  <option value="{{this.id}}">{{this.name}}</option>
+                  {{/each}}
+                </select>
+            </li>
         </ul>
       </div>
     </form>

@@ -21,9 +21,9 @@ if($_POST)
   }
   $username = isset($_POST['username']) ? trim($_POST['username']) : '';
 
-  $where = [
+  $where = array(
     "username"=>$username,
-  ];
+  );
 
   $admin = $db->select()->from("admin")->where($where)->find();
 
@@ -49,8 +49,6 @@ if($_POST)
     
   }
 }
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">

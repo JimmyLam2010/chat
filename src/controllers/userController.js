@@ -98,6 +98,8 @@ module.exports.infoData = function(req,res)
     {
       var filename = path.basename(req.files.avatar.path);
       var avatar = path.join("/uploads/",filename);
+      avatar = avatar.split(path.sep);
+      avatar = avatar.join('/');
       data.avatar = avatar;
     }
 
@@ -426,12 +428,52 @@ module.exports.groupChat = function(req,res)
 //添加好友
 module.exports.friendAdd = function(req,res)
 {
-  var render = {
-    res: res,
-    req: req,
-    file: "friendAdd.html"
-  };
-  base.render(render);
+  var userid = req.cookies.user.userid;
+
+  db.table('user_group').where(`userid=${userid}`).select().then(function(groups){
+    console.log(groups);
+    var render = {
+      res: res,
+      req: req,
+      file: "friendAdd.html",
+      data: {groups: groups}
+    };
+
+    base.render(render);
+  })
+}
+
+module.exports.friendAddData = function(req,res)
+{
+  var userid = req.cookies.user.userid;
+  var name = req.body.name;
+  var groupid = req.body.group;
+
+  db.table("user_friends").where(`userid=${userid}`).select().then(function(user){
+    for(let i=0;i<user.length;i++){
+      db.table("user").where(`id=${user[i].friend}`).find().then(function(friendlist){
+        if(friendlist.username==name){
+          base.alert({res:res,msg:"该好友已添加，请重新填写"});
+        }else{
+          var data = {
+            friend: user[i].friend,
+            userid: userid,
+            groupid: groupid,
+            createtime: moment().unix(),
+            content: null,
+            status: 0
+          }
+
+          db.table('user_friends').add(data).then(function(affect){
+            base.alert({ res: res, msg: "添加成功", url:"/user/groupList"});
+          }).catch(function(err){
+            base.alert({res:res,msg:"无此用户,请重新在试"});
+          })
+        }
+      });
+    }
+  })
+
 }
 
 //分组结束
