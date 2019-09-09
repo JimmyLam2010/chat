@@ -7,13 +7,13 @@
 
 
 <!-- css样式 -->
-<link rel="stylesheet" type="text/css" href="<?php echo ADMIN_PATH;?>/lib/bootstrap/css/bootstrap.css">
-<link rel="stylesheet" type="text/css" href="<?php echo ADMIN_PATH;?>/stylesheets/theme.css">
-<link rel="stylesheet" type="text/css" href="<?php echo ADMIN_PATH;?>/stylesheets/page.css">
-<link rel="stylesheet" type="text/css" href="<?php echo ADMIN_PATH;?>/stylesheets/common.css">
-<link rel="stylesheet" href="<?php echo ADMIN_PATH;?>/lib/font-awesome/css/font-awesome.css">
+<link rel="stylesheet" type="text/css" href="../assets/admin/lib/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="../assets/admin/stylesheets/theme.css">
+<link rel="stylesheet" type="text/css" href="../assets/admin/stylesheets/page.css">
+<link rel="stylesheet" type="text/css" href="../assets/admin/stylesheets/common.css">
+<link rel="stylesheet" href="../assets/admin/lib/font-awesome/css/font-awesome.css">
 
 
 <!-- js样式 -->
-<script src="<?php echo ADMIN_PATH;?>/lib/jquery-1.7.2.min.js" type="text/javascript"></script>
-<script src="<?php echo ADMIN_PATH;?>/js/common.js" type="text/javascript"></script>
+<script src="../assets/admin/lib/jquery-1.7.2.min.js" type="text/javascript"></script>
+<script src="../assets/admin/js/common.js" type="text/javascript"></script>
