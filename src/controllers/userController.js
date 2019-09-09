@@ -423,6 +423,17 @@ module.exports.groupChat = function(req,res)
   
 }
 
+//添加好友
+module.exports.friendAdd = function(req,res)
+{
+  var render = {
+    res: res,
+    req: req,
+    file: "friendAdd.html"
+  };
+  base.render(render);
+}
+
 //分组结束
 
 module.exports.logout = function(req,res)
