@@ -109,24 +109,7 @@ date_default_timezone_set('PRC');
                         </ul>
                     </nav>
                   </div>
-                </div>
-
-                <form method="post">
-                <div class="modal small hide fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 id="myModalLabel">Delete Confirmation</h3>
-                    </div>
-                    <div class="modal-body">
-                        <p class="error-text"><i class="icon-warning-sign modal-icon"></i>Are you sure you want to delete this</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                        <button type="submit" onclick="location='admin_delete.php?id=<?php echo $item['id'];?>'" class="btn btn-danger">Delete</button>
-                    </div>
-                </div>
-                </form>
-                
+                </div>         
                 <footer>
                     <hr>
                     <p>&copy; 2017 <a href="#" target="_blank">copyright</a></p>

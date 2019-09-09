@@ -25,7 +25,7 @@ function __autoload($classname)
   include_once("extends/class.$classname.php");
 }
 
-$db = new DB("localhost","root","root","book");
+$db = new DB("localhost","root","root","chat");
 
 $Strings = new Strings();
 
