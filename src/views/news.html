@@ -1,0 +1,19 @@
+{{extend ('./layout.html')}}
+
+{{#block ("body")}}
+<div class="swiper-slide" style="width: 750px;height:900px;overflow:auto">
+    <form method="post">
+        <div class="say_say">
+            <h3>有什么新鲜事想要告诉大家?</h3>
+            <textarea
+            value="说点什么吧..."
+            onfocus="if(this.value=='说点什么吧...'){this.value=''}"
+            onblur="if(this.value==''){this.value='说点什么吧...';}"
+            name="content">说点什么吧...</textarea>
+        </div>
+        <div class="btn">
+            <button>发表</button>
+        </div>
+    </form>
+</div>
+{{/block}}

@@ -3,7 +3,7 @@ include_once("../includes/init.php");
 include_once("../includes/pagination.php");
 include_once("common.php");
 
-$count = $db->count('user');
+$count = $db->count('chat');
 $count = $count['count'];
 // 当前是第几页
 $page = isset($_GET['page']) && !empty($_GET['page']) ? $_GET['page'] : 1;
@@ -18,10 +18,16 @@ $totalPage = ceil($count / $limit);
 // 总数大于0，进行分页。
 if( $count ) {
     // 2. 连表 倒序 查询 文章和文章分类
-    $userlist = $db->select()->from("user")->limit($offset,$limit)->all();
-    // foreach($data as $key=>$value){
-    //    $data[$key]['title_cut'] = cutstr($value['title'], 0, 10, '...');
-    // }
+    $chatlist = $db->select()->from("chat")->limit($offset,$limit)->all();
+    // $chatlist = $db->select()->from("chat")->join('user', 'pre_chat.fromid=user.id')->limit($offset,$limit)->getSQL();
+    // echo $chatlist;
+    foreach($chatlist as $key=>$item){
+        $from = $db->select()->from('user')->where("id={$item['fromid']}")->all();
+        $to = $db->select()->from('user')->where("id={$item['toid']}")->all();
+        $item['fromname'] = $from[0]['username'];
+        $item['toname'] = $to[0]['username'];
+        $chatlist[$key] = $item;
+    }
 }
 // 3. 生成分页字符串
 $pageStr = pagination($count, $page, $limit, $totalPage);
@@ -54,7 +60,7 @@ date_default_timezone_set('PRC');
             <div class="row-fluid">
                     
                 <div class="btn-toolbar">
-                    <button class="btn btn-primary" onclick="location='user_add_edit.php'"><i class="icon-list"></i> 添加用户</button>
+                    <button class="btn btn-primary" onclick="location='chat_add_edit.php'"><i class="icon-list"></i> 添加用户</button>
                   <div class="btn-group">
                   </div>
                 </div>
@@ -62,50 +68,34 @@ date_default_timezone_set('PRC');
                 <div class="well">
                     <div id="myTabContent" class="tab-content">
                       <div class="tab-pane active in" id="home">
-                      <form action="user_delete.php" method="post">
+                      <form action="chat_delete.php" method="post">
                         <table class="table">
                           <tr>
                               <th><input type="checkbox" name="delete" id="delete" /></th>
                               <th>id</th>
-                              <th>用户名</th>
-                              <th>头像</th>
-                              <th>邮箱</th>
-                              <th>注册时间</th>
-                              <th>验证状态</th>
-                              <th>分组</th>
-                              <th>好友</th>
+                              <th>内容</th>
+                              <th>发送者</th>
+                              <th>接收者</th>
+                              <th>发送时间</th>
+                              <th>状态</th>
                               <th>操作</th>
                           </tr>
-                          <?php foreach($userlist as $item) {?>
+                          <?php foreach($chatlist as $item) {?>
                           <tr>
                               <td><input type="checkbox" class="items" name="cateid[]" value="<?php echo $item['id'];?>" /></td>
                               <td><?php echo $item['id'];?></td>
-                              <td><?php echo $item['username'];?></td>
-                              <?php if(!empty($item['avatar'])){?>
-                              <td>
-                                <div class="user_thumb">
-                                  <img src="<?php echo ASSETS_PATH.$item['avatar'];?>" />
-                                </div>
-                              </td>
-                              <?php }else{?>
-                              <td>
-                                <div class="user_thumb">
-                                  <img class="img-responsive" src="<?php echo ADMIN_PATH.'/images/cover.png';?>" />
-                                </div>
-                              </td>
-                              <?php }?>
-                              <td><?php echo $item['email'];?></td>
+                              <td><?php echo $item['content'];?></td>
+                              <td><?php echo $item['fromname'];?></td>
+                              <td><?php echo $item['toname'];?></td>
                               <td><?php echo date( "Y-m-d H:i",$item['createtime']);?></td>
                               <?php if($item['status']){ ?>
-                              <td>已验证</td>
+                              <td>已读</td>
                               <?php }else{ ?>
-                              <td>未验证</td>
+                              <td>未读</td>
                               <?php } ?>
-                              <td><a href='user_add_edit.php?id=<?php echo $item['id'];?>'><i class="icon-play"></i></a></td>
-                              <td><a href='user_add_edit.php?id=<?php echo $item['id'];?>'><i class="icon-play"></i></a></td>
                               <td>
-                                  <a href='user_add_edit.php?id=<?php echo $item['id'];?>'><i class="icon-pencil"></i></a>
-                                  <a href='user_delete.php?id=<?php echo $item['id'];?>'><i class="icon-remove"></i></a>
+                                  <a href='chat_add_edit.php?id=<?php echo $item['id'];?>'><i class="icon-pencil"></i></a>
+                                  <a href='chat_delete.php?id=<?php echo $item['id'];?>'><i class="icon-remove"></i></a>
                               </td>
                           </tr>
                           <?php }?>

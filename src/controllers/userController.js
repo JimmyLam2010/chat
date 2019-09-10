@@ -29,22 +29,30 @@ var transporter = nodemailer.createTransport(smtpTransport(config));
 module.exports.index = function(req,res)
 {
   var fromid = req.cookies.user.userid ? req.cookies.user.userid : 0;
-  var sql = `SELECT chat.*,user.avatar,user.username FROM pre_chat AS chat LEFT JOIN pre_user AS user ON chat.toid = user.id WHERE chat.fromid = ${fromid} AND chat.status = 0 GROUP BY chat.toid`;
+  var sql = `SELECT chat.*,user.avatar,user.username FROM pre_chat AS chat LEFT JOIN pre_user AS user ON chat.toid = user.id WHERE chat.fromid = ${fromid} GROUP BY chat.toid`;
+
   db.query(sql).then(function(chatlist){
     
-    for(var k in chatlist)
+    for(let k in chatlist)
     {
-      chatlist[k].createtime = moment(chatlist[k].createtime * 1000).format('YYYY-MM-DD HH:mm')
+      chatlist[k].createtime = moment(chatlist[k].createtime * 1000).format('YYYY-MM-DD HH:mm');
+
+      var sql2 = `SELECT COUNT(*) AS count FROM pre_chat WHERE STATUS = 0 AND toid = ${chatlist[k].toid} LIMIT 1`;
+    
+      db.query(sql2).then(function(statusNum){
+        chatlist[k].statusNum = statusNum[0].count;
+
+        if(k==chatlist.length-1){
+          var render = {
+            res: res,
+            req: req,
+            file: "index.html",
+            data: { chatlist: chatlist}
+          };
+          base.render(render);
+        }
+      })  
     }
-
-    var render = {
-      res: res,
-      req: req,
-      file: "index.html",
-      data: { chatlist: chatlist}
-    };
-    base.render(render);
-
   });
 }
 
@@ -391,6 +399,13 @@ module.exports.groupChat = function(req,res)
   //自己的id
   var userid = req.cookies.user.userid ? req.cookies.user.userid : 0;
 
+  var status = {
+    status: 1
+  }
+  db.table('chat').where(`fromid=${userid} AND toid=${friendid}`).update(status).then(function(affect){
+    
+  })
+
   //先查询朋友
   db.table("user").where({ id: friendid}).find().then(function(friend){
     if(JSON.stringify(friend) == "{}")
@@ -448,15 +463,31 @@ module.exports.friendAddData = function(req,res)
   var userid = req.cookies.user.userid;
   var name = req.body.name;
   var groupid = req.body.group;
+  var friendid;
 
-  db.table("user_friends").where(`userid=${userid}`).select().then(function(user){
-    for(let i=0;i<user.length;i++){
-      db.table("user").where(`id=${user[i].friend}`).find().then(function(friendlist){
-        if(friendlist.username==name){
-          base.alert({res:res,msg:"该好友已添加，请重新填写"});
-        }else{
+  var friendList = [];
+  var userlist = [];
+
+  db.table('user_friends').join('pre_user on pre_user_friends.friend = pre_user.id').where(`userid=${userid}`).select().then(function(friend){
+    for(let i=0;i<friend.length;i++){
+      friendList.push(friend[i].username);
+    }
+
+    if(friendList.includes(name)){
+      base.alert({res:res,msg:"该好友已添加，请重新填写"});
+    }else{
+      db.table('user').select().then(function(allUser){
+        for(let j=0;j<allUser.length;j++){
+          userlist.push(allUser[j].username);
+          
+          if(allUser[j].username==name){
+            friendid = allUser[j].id;
+          }
+        }
+
+        if(userlist.includes(name)){
           var data = {
-            friend: user[i].friend,
+            friend: friendid,
             userid: userid,
             groupid: groupid,
             createtime: moment().unix(),
@@ -467,16 +498,71 @@ module.exports.friendAddData = function(req,res)
           db.table('user_friends').add(data).then(function(affect){
             base.alert({ res: res, msg: "添加成功", url:"/user/groupList"});
           }).catch(function(err){
-            base.alert({res:res,msg:"无此用户,请重新在试"});
+            base.alert({res:res,msg:"添加失败,请重新在试"});
           })
+        }else{
+          base.alert({res:res,msg:"无此用户，请重新再试"});
         }
-      });
+      })
     }
   })
-
 }
 
-//分组结束
+module.exports.addNews = function(req,res)
+{
+  var render = {
+    res: res,
+    req: req,
+    file: "news.html",
+  };
+
+  base.render(render);
+}
+
+module.exports.addNewsData = function(req,res)
+{
+  var userid = req.cookies.user.userid;
+
+  var content = req.body.content;
+
+  var data = {
+    userid: userid,
+    content: content,
+    createtime: moment().unix(),
+    view: 0,
+    like: 0
+  }
+
+  db.table('moment').add(data).then(function(affect){
+    base.alert({ res: res, msg: "添加成功", url:"/user/moments"});
+  }).catch(function(err){
+    base.alert({res:res,msg:"添加失败,请重新在试"});
+  })
+}
+
+module.exports.viewMoments = function(req,res)
+{
+  var userid = req.cookies.user.userid;
+
+  db.table('moment').join('pre_user on pre_moment.userid = pre_user.id').select().then(function(moments){
+
+    for(let i in moments)
+    {
+      moments[i].createtime = moment(moments[i].createtime * 1000).format('YYYY-MM-DD HH:mm');
+    }
+
+    // console.log(moments);
+
+    var render = {
+      res: res,
+      req: req,
+      file: "moments.html",
+      data: {moments: moments}
+    };
+  
+    base.render(render);
+  })
+}
 
 module.exports.logout = function(req,res)
 {

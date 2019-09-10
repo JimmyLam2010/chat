@@ -3,7 +3,7 @@ include_once("../includes/init.php");
 include_once("../includes/pagination.php");
 include_once("common.php");
 
-$count = $db->count('user');
+$count = $db->count('moment');
 $count = $count['count'];
 // 当前是第几页
 $page = isset($_GET['page']) && !empty($_GET['page']) ? $_GET['page'] : 1;
@@ -18,10 +18,13 @@ $totalPage = ceil($count / $limit);
 // 总数大于0，进行分页。
 if( $count ) {
     // 2. 连表 倒序 查询 文章和文章分类
-    $userlist = $db->select()->from("user")->limit($offset,$limit)->all();
-    // foreach($data as $key=>$value){
-    //    $data[$key]['title_cut'] = cutstr($value['title'], 0, 10, '...');
-    // }
+    $momentlist = $db->select()->from("moment")->limit($offset,$limit)->all();
+    
+    foreach($momentlist as $key=>$item){
+        $from = $db->select()->from('user')->where("id={$item['userid']}")->all();
+        $item['fromname'] = $from[0]['username'];
+        $momentlist[$key] = $item;
+    }
 }
 // 3. 生成分页字符串
 $pageStr = pagination($count, $page, $limit, $totalPage);
@@ -67,42 +70,22 @@ date_default_timezone_set('PRC');
                           <tr>
                               <th><input type="checkbox" name="delete" id="delete" /></th>
                               <th>id</th>
-                              <th>用户名</th>
-                              <th>头像</th>
-                              <th>邮箱</th>
-                              <th>注册时间</th>
-                              <th>验证状态</th>
-                              <th>分组</th>
-                              <th>好友</th>
+                              <th>发送者</th>
+                              <th>内容</th>
+                              <th>发送时间</th>
+                              <th>查看人数</th>
+                              <th>点赞人数</th>
                               <th>操作</th>
                           </tr>
-                          <?php foreach($userlist as $item) {?>
+                          <?php foreach($momentlist as $item) {?>
                           <tr>
                               <td><input type="checkbox" class="items" name="cateid[]" value="<?php echo $item['id'];?>" /></td>
                               <td><?php echo $item['id'];?></td>
-                              <td><?php echo $item['username'];?></td>
-                              <?php if(!empty($item['avatar'])){?>
-                              <td>
-                                <div class="user_thumb">
-                                  <img src="<?php echo ASSETS_PATH.$item['avatar'];?>" />
-                                </div>
-                              </td>
-                              <?php }else{?>
-                              <td>
-                                <div class="user_thumb">
-                                  <img class="img-responsive" src="<?php echo ADMIN_PATH.'/images/cover.png';?>" />
-                                </div>
-                              </td>
-                              <?php }?>
-                              <td><?php echo $item['email'];?></td>
+                              <td><?php echo $item['fromname'];?></td>
+                              <td><?php echo $item['content'];?></td>
                               <td><?php echo date( "Y-m-d H:i",$item['createtime']);?></td>
-                              <?php if($item['status']){ ?>
-                              <td>已验证</td>
-                              <?php }else{ ?>
-                              <td>未验证</td>
-                              <?php } ?>
-                              <td><a href='user_add_edit.php?id=<?php echo $item['id'];?>'><i class="icon-play"></i></a></td>
-                              <td><a href='user_add_edit.php?id=<?php echo $item['id'];?>'><i class="icon-play"></i></a></td>
+                              <td><?php echo $item['view'];?></td>
+                              <td><?php echo $item['like'];?></td>
                               <td>
                                   <a href='user_add_edit.php?id=<?php echo $item['id'];?>'><i class="icon-pencil"></i></a>
                                   <a href='user_delete.php?id=<?php echo $item['id'];?>'><i class="icon-remove"></i></a>

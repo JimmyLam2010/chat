@@ -1,0 +1,57 @@
+{{extend ('./layout.html')}}
+
+{{#block ("body")}}
+<div class="swiper-slide" style="width: 750px;height:900px;overflow:auto; background:#ECECEC">
+    <div class="space news">
+        <ul>
+            {{#each(moments)}}
+            <li>
+                <div class="lf">
+                    {{#if(!this.avatar)}}
+                        <img src="/home/img/a1.png" />
+                    {{else}}
+                        <img src="{{this.avatar}}" />
+                    {{/if}}
+                    <h1>{{this.username}}</h1>
+                </div>
+                <div class="rt">
+                    <span>{{this.createtime}}</span>
+                </div>
+                <div style="clear:both"></div>
+                <p class="say">
+                {{this.content}}
+                </p>
+                <div class="carry">
+                    <div class="carry_lf">
+                        共浏览{{this.view}}次
+                    </div>
+                    <div class="carry_rt">
+                        <span style="background:url('/home/img/a5.jpg')"></span>
+                        <span style="background:url('/home/img/a6.jpg')"></span>
+                    </div>
+                    <div style="clear:both"></div>
+                </div>
+                <div class="comment">
+                    <div class="zan">
+                        <h1>
+                            <span>吃瓜</span>、
+                        </h1>
+                    </div>
+                    <h2>
+                        <span>吃瓜：</span>
+                        此地无银三百两
+                    </h2>
+                    <h2>
+                        <span>群众：</span>
+                        隔壁王二不曾偷
+                    </h2>
+                </div>
+                <div class="inpt">
+                    <input type="text" />
+                </div>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+</div>
+{{/block}}

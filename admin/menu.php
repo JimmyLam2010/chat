@@ -7,7 +7,7 @@
         <li ><a href="admin.php">管理员</a></li>
         <li ><a href="user.php">用户管理</a></li>
         <li ><a href="chat.php">聊天管理</a></li>
-        <li ><a href="chat.php">说说管理</a></li>
+        <li ><a href="moments.php">说说管理</a></li>
         <li ><a href="config.php">网站设置</a></li>
     </ul>
 </div>

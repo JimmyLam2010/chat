@@ -13,7 +13,9 @@
               <img src="{{this.avatar}}" />
             {{/if}}
             <h1>{{this.username}}</h1>
-            <span>...</span>
+            {{#if(this.statusNum)}}
+              <span>{{this.statusNum}}</span>
+            {{/if}}
           </div>
           <div class="rt">
             <span>{{this.createtime}}</span>

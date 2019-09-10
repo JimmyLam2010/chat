@@ -15,7 +15,7 @@ cite,em{font-style:normal;}
 a{text-decoration:none;}
 a:active { background:#dfdfdf} 
 img{border:0px;}
-.swiper-slide{ float:left;}
+.swiper-slide{ float:left; height: 100%!important;}
 .fillet {-webkit-border-radius:4px; border-radius:4px; -moz-border-radius:4px;}
 /*-------------------------------------------------*/
 
